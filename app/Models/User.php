@@ -11,6 +11,10 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_CONTENT_MANAGER = 'ROLE_CONTENT_MANAGER';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,6 +63,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
     }
 
 }
