@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Http\Requests\AuthRequest;
+
 
 class AuthController extends Controller
 {
@@ -87,5 +89,17 @@ class AuthController extends Controller
             ]
         ]);
     }
+
+    public function auth(AuthRequest $request)
+    {
+        $credentials = $request->validated();
+
+        if (Auth::attempt($credentials, $request->input('rememberMe'))) {
+            $request->session()->regenerate();
+
+            return view('logined');
+        }
+        return back()->withErrors(['email' => 'EMAIL INVALID OR PASSWORD INVALID']);
+    }    
 
 }
